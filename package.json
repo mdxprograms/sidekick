@@ -4,7 +4,7 @@
   "description": "",
   "main": "sidekick.js",
   "browser": "./dist/sidekick.min.js",
-  "files": ["./dist/sidekick.min.js"],
+  "files": ["./dist"],
   "scripts": {
     "start": "live-server src/ --host=localhost --port=3000",
     "build": "npm run clean && npm run uglify",
