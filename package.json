@@ -1,15 +1,12 @@
 {
-  "name": "sidekick",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@mdxprograms/sidekick",
+  "version": "2.0.0",
+  "description": "A Javascript utility library for drop-in use.",
   "main": "sidekick.js",
-  "browser": "./dist/sidekick.min.js",
-  "files": ["./dist"],
   "scripts": {
     "start": "live-server src/ --host=localhost --port=3000",
-    "build": "npm run clean && npm run uglify",
-    "uglify": "uglifyjs --compress --mangle -o dist/sidekick.min.js -- src/sidekick.js",
-    "clean": "rm -rf dist && mkdir dist",
+    "build": "npm run uglify",
+    "uglify": "uglifyjs --compress --mangle -o sidekick.min.js -- src/sidekick.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,7 +14,7 @@
     "url": "git+https://github.com/mdxprograms/sidekick.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Josh Waller",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mdxprograms/sidekick/issues"
