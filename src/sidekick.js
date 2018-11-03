@@ -3,6 +3,7 @@ function Sidekick() {
   this.styles = {};
   this.scripts = {};
   this.events = {};
+  this.data = {};
 }
 
 Sidekick.prototype = {
@@ -66,6 +67,23 @@ Sidekick.prototype = {
   capitalize: function(word) {
     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
   },
+  el: function(selector) {
+    return document.querySelector(selector);
+  },
+  getData: function(key) {
+    if (!this.data[key]) {
+      for (var prop in this.data) {
+        if (this.data.hasOwnProperty(prop)) {
+          if (!this.data[prop][key]) {
+            this.getData(this.data[prop]);
+          }
+
+          return this.data[prop][key];
+        }
+      }
+    }
+    return this.data[key];
+  },
   getScripts: function() {
     return this.scripts;
   },
@@ -74,6 +92,10 @@ Sidekick.prototype = {
   },
   getEvents: function() {
     return this.events;
+  },
+  saveData: function(data) {
+    this.data = Object.assign({}, this.data, data);
+    return this.data;
   },
   titlize: function(words) {
     var title = "";

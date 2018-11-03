@@ -1,0 +1,29 @@
+{
+  "name": "sidekick",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sidekick.js",
+  "scripts": {
+    "start": "live-server src/ --host=localhost --port=3000",
+    "build": "npm run clean && npm run uglify",
+    "uglify": "uglifyjs --compress --mangle -o dist/sidekick.min.js -- src/sidekick.js",
+    "clean": "rm -rf dist && mkdir dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdxprograms/sidekick.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mdxprograms/sidekick/issues"
+  },
+  "homepage": "https://github.com/mdxprograms/sidekick#readme",
+  "devDependencies": {
+    "live-server": "^1.2.0",
+    "prettier": "^1.14.3",
+    "uglify-js": "^3.4.9"
+  }
+}

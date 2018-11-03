@@ -1,21 +1,5 @@
-var kick = new Sidekick();
-
-var appendNavItem = function(item) {
-  console.log(item);
-};
-
-var buttonClick = function() {
-  // trigger other events
-  kick.trigger("changeBgColor", "blue");
-  kick.trigger("appendNavItem", "item 8");
-};
-
-var changeBgColor = function(color) {
-  document.body.style.background = color;
-};
-
 // chaining adds
-kick
+var kick = new Sidekick()
   .addStyles([
     "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
   ])
@@ -43,3 +27,26 @@ kick
       callback: appendNavItem
     }
   ]);
+
+// functions attached to event callbacks
+function appendNavItem(item) {
+  kick.el(".nav").innerHTML += item;
+}
+
+function buttonClick() {
+  // trigger other events
+  kick.trigger("changeBgColor", "blue");
+  kick.trigger("appendNavItem", "item 3.5");
+}
+
+function changeBgColor(color) {
+  document.body.style.background = color;
+}
+
+// utility function examples
+var titlize = kick.titlize("hello world");
+console.log(titlize);
+
+kick.saveData({ user: { name: "Foo Bar", age: 100 } });
+
+console.log(kick.getData("user"));
