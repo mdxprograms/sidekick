@@ -6,47 +6,46 @@ var kick = new Sidekick()
   .addScripts([
     "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"
-  ])
-  .addEvents([
-    {
-      name: "changeBgColor",
-      selector: "body",
-      type: null, // set null if triggered elsewhere
-      callback: changeBgColor
-    },
-    {
-      name: "buttonClick",
-      selector: ".change-background",
-      type: "click",
-      callback: buttonClick
-    },
-    {
-      name: "appendNavItem",
-      selector: ".nav",
-      type: null,
-      callback: appendNavItem
-    }
   ]);
 
-// functions attached to event callbacks
-function appendNavItem(item) {
-  kick.el(".nav").innerHTML += item;
-}
-
-function buttonClick() {
-  // trigger other events
-  kick.trigger("changeBgColor", "blue");
-  kick.trigger("appendNavItem", "item 3.5");
+// custom event functions
+function addItem(text) {
+  kick.event(".nav:addItem", { text: text });
 }
 
 function changeBgColor(color) {
-  document.body.style.background = color;
+  kick.event("body:changeBgColor", { color: color });
 }
 
-// utility function examples
-var titlize = kick.titlize("hello world");
-console.log(titlize);
+function changeHeadingText(text) {
+  kick.event("h1:changeHeadingText", { text: text });
+}
 
-kick.saveData({ user: { name: "Foo Bar", age: 100 } });
+// custom event listeners, detail property holds the passed object data on the event (e)
+// can also access data changes instead using kick.saveData and kick.getData
+kick.listen(".nav:addItem", function(e) {
+  e.target.innerHTML += e.detail.text;
+});
 
-console.log(kick.getData("user"));
+kick.listen("body:changeBgColor", function(e) {
+  // if changeBgColor("orange") was set then we could use e.detail.color instead
+  // since it was defined in the changeBgColor function above
+
+  // e.target.style.background = e.detail.color;
+  e.target.style.background = kick.getData("color");
+});
+
+kick.listen("h1:changeHeadingText", function(e) {
+  e.target.innerText = kick.getData("color");
+});
+
+// native event listener
+kick.on("button:click", function(e) {
+  var colors = ["orange", "lightblue", "silver", "lightgreen", "darkcyan"];
+  var randColor = Math.floor(Math.random() * colors.length);
+
+  kick.saveData({ color: colors[randColor] });
+  // changeBgColor(randColor);
+  changeBgColor();
+  changeHeadingText(randColor);
+});

@@ -6,21 +6,37 @@ function Sidekick() {
   this.data = {};
 }
 
+var helpers = {
+  parseEvtString: function(evtString) {
+    return {
+      element: evtString.split(":")[0],
+      evtName: evtString.split(":")[1]
+    };
+  }
+};
+
 Sidekick.prototype = {
-  addEvent: function(selector, type, fn) {
-    var element = document.querySelector(selector);
-    element.addEventListener(type, function(e) {
-      return fn(e);
+  // define custom event
+  event: function(elWithEvt, data) {
+    var parsedEvt = helpers.parseEvtString(elWithEvt);
+
+    this.events[elWithEvt] = new CustomEvent(elWithEvt, {
+      detail: data
     });
-    return this;
+
+    this.el(parsedEvt.element).dispatchEvent(this.events[elWithEvt]);
   },
-  addEvents: function(events) {
-    var self = this;
-    events.forEach(function(event) {
-      self.events[event.name] = event.callback;
-      self.addEvent(event.selector, event.type, event.callback);
-    });
-    return self;
+  // listen for native event
+  on: function(elWithEvt, callback) {
+    var parsedEvt = helpers.parseEvtString(elWithEvt);
+
+    this.el(parsedEvt.element).addEventListener(parsedEvt.evtName, callback);
+  },
+  // listen for custom event
+  listen: function(elWithEvt, callback) {
+    var element = helpers.parseEvtString(elWithEvt).element;
+
+    this.el(element).addEventListener(elWithEvt, callback);
   },
   addScript: function(src) {
     var body = document.getElementsByTagName("body")[0];
@@ -104,11 +120,5 @@ Sidekick.prototype = {
       title += self.capitalize(word) + " ";
     });
     return title;
-  },
-  trigger: function(eventName, data) {
-    if (data) {
-      return this.getEvents()[eventName](data);
-    }
-    return this.getEvents()[eventName]();
   }
 };
