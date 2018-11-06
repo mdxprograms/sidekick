@@ -37,46 +37,55 @@ Sidekick.prototype = {
 
     this.el(element).addEventListener(elWithEvt, callback);
   },
-  addScript: function(src) {
+  // Add single external script
+  addScript: function(scriptUrl) {
+    var scriptName = scriptUrl
+      .split("/")
+      .pop()
+      .replace(".min.js", "")
+      .replace(".js", "");
     var body = document.getElementsByTagName("body")[0];
     var script = document.createElement("script");
-    script.src = src;
+
+    this.scripts[scriptName] = script;
+    script.src = scriptUrl;
     body.appendChild(script);
+
     return this;
   },
   addScripts: function(scripts) {
     var self = this;
-    scripts.forEach(function(script) {
-      var scriptName = script
-        .split("/")
-        .pop()
-        .replace(".min.js", "")
-        .replace(".js", "");
-      self.scripts[scriptName] = script;
-      self.addScript(script);
+
+    scripts.forEach(function(scriptUrl) {
+      self.addScript(scriptUrl);
     });
+
     return self;
   },
-  addStyle: function(src) {
+  addStyle: function(styleUrl) {
     var head = document.getElementsByTagName("head")[0];
     var link = document.createElement("link");
+    var styleName = styleUrl
+      .split("/")
+      .pop()
+      .replace(".min.css", "")
+      .replace(".css", "");
+
+    this.styles[styleName] = styleUrl;
     link.type = "text/css";
     link.rel = "stylesheet";
-    link.href = src;
+    link.href = styleUrl;
     head.appendChild(link);
+
     return this;
   },
   addStyles: function(styles) {
     var self = this;
-    styles.forEach(function(style) {
-      var styleName = style
-        .split("/")
-        .pop()
-        .replace(".min.css", "")
-        .replace(".css", "");
-      self.styles[styleName] = style;
-      self.addStyle(style);
+
+    styles.forEach(function(styleUrl) {
+      self.addStyle(styleUrl);
     });
+
     return self;
   },
   capitalize: function(word) {
@@ -85,6 +94,7 @@ Sidekick.prototype = {
   el: function(selector) {
     return document.querySelector(selector);
   },
+  // recursive object property search
   getData: function(key) {
     if (!this.data[key]) {
       for (var prop in this.data) {
@@ -110,14 +120,23 @@ Sidekick.prototype = {
   },
   saveData: function(data) {
     this.data = Object.assign({}, this.data, data);
+
     return this.data;
+  },
+  setPageTitle: function(title) {
+    document.title = title;
   },
   titlize: function(words) {
     var title = "";
     var self = this;
+
     words.split(" ").forEach(function(word) {
       title += self.capitalize(word) + " ";
     });
+
     return title;
+  },
+  toggleClass: function(element, cls) {
+    element.classList.toggle(cls);
   }
 };
