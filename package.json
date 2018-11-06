@@ -1,6 +1,6 @@
 {
   "name": "@mdxprograms/sidekick",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "A Javascript utility library for drop-in use.",
   "main": "sidekick.js",
   "scripts": {
